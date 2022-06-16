@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,8 @@ public class Player : MonoBehaviour
     public float mouseSensitivity = 100f;
     private float cameraVerticalRotation;
 
+    public GameObject bullet;
+    public Transform firePosition;
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +27,15 @@ public class Player : MonoBehaviour
     {
         PlayerMovement();
         CameraMovement();
+        Shoot();
+    }
+
+    private void Shoot()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Instantiate(bullet, firePosition.position, firePosition.rotation);
+        }
     }
 
     private void CameraMovement()
