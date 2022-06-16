@@ -5,7 +5,7 @@ using UnityEngine;
 public class BulletController : MonoBehaviour
 {
 
-    public float speed;
+    public float speed, bulletLife;
     public Rigidbody myRigidBody;
 
 
@@ -19,10 +19,22 @@ public class BulletController : MonoBehaviour
     void Update()
     {
         BulletFly();
+
+        bulletLife -= Time.deltaTime;   
+
+        if (bulletLife < 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void BulletFly()
     {
         myRigidBody.velocity = transform.forward * speed;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Destroy(gameObject);
     }
 }
