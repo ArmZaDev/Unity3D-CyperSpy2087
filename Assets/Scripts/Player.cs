@@ -7,6 +7,11 @@ public class Player : MonoBehaviour
 {
 
     public float speed = 12.5f;
+    
+    //adding Gravity
+    public Vector3 veclocity;
+    public float gravityModifier;
+
     public CharacterController myController;
     [SerializeField]private Transform myCameraHead;
 
@@ -16,7 +21,14 @@ public class Player : MonoBehaviour
     public GameObject bullet;
     public Transform firePosition;
 
-    public GameObject muzzleFlash, bulletHole;
+    public GameObject muzzleFlash, bulletHole, waterLeak;
+
+    //jumping
+    public float jumpHeight = 10f;
+    private bool readyToJump;
+    public Transform ground;
+    public LayerMask groundLayer;
+    public float groundDistance = 0.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +42,19 @@ public class Player : MonoBehaviour
         PlayerMovement();
         CameraMovement();
         Shoot();
+        Jump();
+    }
+
+    void Jump()
+    {
+        readyToJump = Physics.OverlapSphere(ground.position, groundDistance, groundLayer).Length > 0;
+
+        if (Input.GetButtonDown("Jump") && readyToJump)
+        {
+            veclocity.y = Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y) * Time.deltaTime;
+        }
+
+        myController.Move(veclocity);
     }
 
     private void Shoot()
@@ -43,7 +68,18 @@ public class Player : MonoBehaviour
                 if (Vector3.Distance(myCameraHead.position, hit.point) > 2f)
                 {
                     firePosition.LookAt(hit.point);
-                }              
+
+                    if (hit.collider.tag == "Shootable")                                     
+                        Instantiate(bulletHole, hit.point, Quaternion.LookRotation(hit.normal));                                       
+                    
+                    if (hit.collider.CompareTag("WaterLeaker"))
+                        Instantiate(waterLeak, hit.point, Quaternion.LookRotation(hit.normal));
+                }
+                
+                if (hit.collider.CompareTag("Enemy"))
+                {
+                    Destroy(hit.collider.gameObject);
+                }
             }
             else
             {
@@ -76,5 +112,15 @@ public class Player : MonoBehaviour
         movement = movement * speed * Time.deltaTime;
 
         myController.Move(movement);
+
+        veclocity.y += Physics.gravity.y * Mathf.Pow(Time.deltaTime, 2) * gravityModifier;
+
+        if (myController.isGrounded)
+        {
+            veclocity.y = Physics.gravity.y * Time.deltaTime;
+        }
+
+        myController.Move(veclocity);
+        
     }
 }
