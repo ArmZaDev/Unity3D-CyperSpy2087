@@ -30,10 +30,19 @@ public class Player : MonoBehaviour
     public LayerMask groundLayer;
     public float groundDistance = 0.5f;
 
+    //crouching
+    private Vector3 crouchScale = new Vector3(1, 0.5f, 1);
+    private Vector3 bodyScale;
+    public Transform myBody;
+    private float initialControllerHeight;
+    public float crouchSpeed = 6f;
+    private bool isCrouching = false;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        bodyScale = myBody.localScale;
+        initialControllerHeight = myController.height;
     }
 
     // Update is called once per frame
@@ -43,6 +52,36 @@ public class Player : MonoBehaviour
         CameraMovement();
         Shoot();
         Jump();
+        Crouching();
+    }
+
+    private void Crouching()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            StartCrouching();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            StopCrouching();
+        }
+    }
+
+    private void StartCrouching()
+    {
+        myBody.localScale = crouchScale;
+        myCameraHead.position -= new Vector3(0, 1f, 0);
+        myController.height /= 2;
+        isCrouching = true;
+    }
+
+    private void StopCrouching()
+    {
+        myBody.localScale = bodyScale;
+        myCameraHead.position += new Vector3(0, 1f, 0);
+        myController.height = initialControllerHeight;
+        isCrouching = false;
     }
 
     void Jump()
@@ -109,7 +148,15 @@ public class Player : MonoBehaviour
         float z = Input.GetAxis("Vertical");
 
         Vector3 movement = x * transform.right + z * transform.forward;
-        movement = movement * speed * Time.deltaTime;
+
+        if (isCrouching)
+        {
+            movement = movement * crouchSpeed * Time.deltaTime;
+        }
+        else
+        {
+            movement = movement * speed * Time.deltaTime;
+        }     
 
         myController.Move(movement);
 
