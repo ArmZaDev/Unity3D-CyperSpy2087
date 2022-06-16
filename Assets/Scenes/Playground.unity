@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.16788375, g: 0.21073635, b: 0.28994125, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 0f3dc836e2f238647815650bc95cc3da, type: 2}
+  m_LightingDataAsset: {fileID: 112000000, guid: 0f3dc836e2f238647815650bc95cc3da,
+    type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -383,6 +384,9 @@ MonoBehaviour:
   mouseSensitivity: 1000
   bullet: {fileID: 7746086310487053391, guid: 21da6e86aec5e8c46948ec58043d9445, type: 3}
   firePosition: {fileID: 1120895044}
+  muzzleFlash: {fileID: 1000010254994808, guid: a4ef474ec855cf34e806e7641e410739,
+    type: 3}
+  bulletHole: {fileID: 1000010355441670, guid: c9d7cded4eae1f14baa47124b20a8338, type: 3}
 --- !u!1 &566330589
 GameObject:
   m_ObjectHideFlags: 0
